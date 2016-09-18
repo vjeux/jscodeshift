@@ -16,3 +16,21 @@ export default function transformer(file, api) {
 };
 ```
 
+## Avoid doing work
+
+Because `jscodeshift` mutation API relies on direct mutation of the AST, it cannot know that you changed something and therefore will try to print the entire file all the time. A handy trick to reduce the time it takes to run the codemod in cases where there are a lot of false positives is to return null from the `transformer` function when nothing happened.
+
+```js
+export default function transformer(file, api) {
+  const j = api.jscodeshift;
+  let hasChanged = false;
+
+
+  const root = j(file.source)
+    .find(/* ... */)
+    .forEach(path => {
+      hasChanged = true;
+    })
+    .toSource();
+};
+```
