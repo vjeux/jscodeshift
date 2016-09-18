@@ -40,11 +40,26 @@ arrow.async = true;
 
 If you are curious, check out the [list of all the specified builders](https://github.com/benjamn/ast-types/tree/master/def).
 
-## Replacing nodes
+## Replacing node
 
-You are likely going to want to replace a node by another you just created. There's a helper for this imaginatively called `replaceWith`. It only works on collections that have access to their parents, so you need to have a reference to a `path` variable if you want to do that.
+If you have access to the parent node and know in which field the node you want to update is, you can mutate it directly.
 
 ```js
-var node = j.identifier('kikoo');
-j(path).replaceWith(node);
+path.node.callee = j.identifier('kikoo');
+```
+
+In many cases, you are querying for the node you want to replace and you don't know the type of the parent nor in which field that node resides. For those cases, there's a handy helper called `replaceWith` that can be used if you have a `path` to that node (that has the parentPath information).
+
+```js
+j(path).replaceWith(j.identifier('kikoo'));
+```
+
+It's important to realize that there is no validation of the AST structure after you modify it. `jscodeshift` will happily pretty-print an ill-formed AST resulting in a code that doesn't parse properly anymore.
+
+## Removing nodes
+
+Node removal behaves very similarly as replacement, you can either do it the mutative way or use the `remove` helper when you don't know the parent.
+
+```js
+j(path).remove();
 ```
