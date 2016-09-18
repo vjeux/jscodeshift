@@ -1,10 +1,10 @@
 # Modifying the AST
 
-Now that you found the node you were looking for, it is time to actually change it.
+Now that you found the node you were looking for, it is time to modify the AST!
 
 ## Mutate nodes directly
 
-The easiest way is to just mutate the ast nodes in place. When you are going to eventually call `toSource()`, recast will detect what changed and only reprint those sections.
+The AST is a set of nodes which are just plain JavaScript values, you can and should mutate them directly. At the end of the codemod when you call `toSource()`, `jscodeshift` will detect what you mutated and only reprint those sections. This is useful to preserve as much of the original formatting as possible.
 
 For example, if you want to reverse the name of all the identifiers, you can write
 
@@ -17,7 +17,7 @@ For example, if you want to reverse the name of all the identifiers, you can wri
 
 ## Creating a new node
 
-In order to create a new node, you want to use a node builder. For example if you want to create a node of type `ArrowFunctionExpression`, you build it by calling `j.arrowFunctionExpression()`: the type of the node but the first letter being lowercase.
+In order to create a new node, you want to use a node builder. For example if you want to create a node of type `ArrowFunctionExpression`, you invoke its builder by calling `j.arrowFunctionExpression()`. The builders are named the same as the node type but with the first character being lowercase.
 
 The easiest way to know what arguments the builder takes is to call it with no arguments and read the error message.
 
@@ -31,7 +31,7 @@ j.arrowFunctionExpression()
 // )
 ```
 
-The builders are hand-written in order provide an easy way to specify the most common ways of creating new nodes. They do not encode all the possible values a node can have. If you want to modify an attribute that a builder doesn't have, you can just edit the raw node returned from the builder after the fact.
+The builders are hand-written in order provide an easy way to specify the most common ways of creating new nodes. They do not encode all the possible attributes a node can have. If you want to modify an attribute that a builder doesn't have, you can mutate the raw node returned from the builder after the fact.
 
 ```js
 var arrow = j.arrowFunctionExpression([], j.blockStatement([]));
@@ -40,15 +40,15 @@ arrow.async = true;
 
 If you are curious, check out the [list of all the specified builders](https://github.com/benjamn/ast-types/tree/master/def).
 
-## Replacing node
+## Replacing a node
 
-If you have access to the parent node and know in which field the node you want to update is, you can mutate it directly.
+If you have access to the parent node and know in which attribute the node you want to update is, you can mutate it directly.
 
 ```js
 path.node.callee = j.identifier('kikoo');
 ```
 
-In many cases, you are querying for the node you want to replace and you don't know the type of the parent nor in which field that node resides. For those cases, there's a handy helper called `replaceWith` that can be used if you have a `path` to that node (that has the parentPath information).
+In many cases howerver, you are querying for the node you want to replace and you don't know the type of the parent nor in which attribute that node resides. For those cases, there's a handy helper called `replaceWith` that can be used. Note that you cannot use it if you just have a `node`, you need its `path` as it contains the information to traverse up (`parentPath`).
 
 ```js
 j(path).replaceWith(j.identifier('kikoo'));
@@ -56,7 +56,7 @@ j(path).replaceWith(j.identifier('kikoo'));
 
 It's important to realize that there is no validation of the AST structure after you modify it. `jscodeshift` will happily pretty-print an ill-formed AST resulting in a code that doesn't parse properly anymore.
 
-## Removing nodes
+## Removing a node
 
 Node removal behaves very similarly as replacement, you can either do it the mutative way or use the `remove` helper when you don't know the parent.
 
