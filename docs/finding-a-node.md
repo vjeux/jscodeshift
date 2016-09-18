@@ -56,17 +56,6 @@ function isDescribeNode(node) {
 
 If you read the code closely enough, you may realize that I didn't check that `node.callee` existed before dereferencing it. The rule of thumb is that you always (yes, always!) want to check the `type` field of every node you read from the AST and then you are usually good assuming that all the attributes will be there.
 
-## Nested calls
-
-If you have a node or a path, you can wrap it in `j` and call `find` again.
-
-```js
-  .find(j.CallExpression)
-  .forEach(path => {
-    j(path.node).find(j.Identifier).forEach(/* ... */);
-  }
-```
-
 ## Length of a collection
 
 The object you get from a `j` call are not real arrays, so unfortunately `.length` doesn't work on them. Instead you can call `.size()` to get the length of a collection.
@@ -76,7 +65,7 @@ The object you get from a `j` call are not real arrays, so unfortunately `.lengt
   .size()
 ```
 
-## Traversing up
+## `node` vs `path`
 
 There are two concepts that is worth understanding:
 
@@ -86,7 +75,9 @@ There are two concepts that is worth understanding:
   - `parentPath` which allows you to traverse the AST upward
   - `node` which gives you the raw AST node
 
-If you want to traverse the AST upwards, the `parentPath` attribute is handy. A common use case is to find out if you are inside of an AST node of a specific type.
+## Traversing up
+
+If you want to traverse the AST upwards, the `parentPath` attribute is handy of a `path`. A common use case is to find out if you are inside of an AST node of a specific type.
 
 ```js
 function isInsideOfFunctionDeclaration(path) {
@@ -102,12 +93,11 @@ function isInsideOfFunctionDeclaration(path) {
 
 ### Getting a `node` from a `path`
 
-If you have a reference to a `node`, you can get a `path` back by wrapping it into `j`, but you lose the ability to traverse up the tree because `parentPath` no longer exists. You can only go down from this point.
+If you have a reference to a `node`, you can get a `path` back by wrapping it into `j`, but you lose the ability to traverse up the tree because `parentPath` no longer exists. This is very useful if you want to re-trigger a search from that point.
 
 ```js
+  .find(j.CallExpression)
   .forEach(path => {
-    var node = path.node;
-    var path = j(node); // You lost the ability to access parentPath!
-    path.find(/* ... */)
-  })
+    j(path.node).find(j.Identifier).forEach(/* ... */);
+  }
 ```
