@@ -1,9 +1,8 @@
 # Finding a node
 
-[AST Explorer](http://astexplorer.net/) is going to be your development environment. In order to find the node you are looking for, you want to paste a piece of code that you want to transform on the left pane and use the right pane to see the corresponding AST.
+[ASTExplorer.net](http://astexplorer.net/) is going to be your development environment. In order to find the node you are looking for, you want to paste a piece of code that you want to transform on the left pane and use the right pane to see the corresponding AST.
 
 ![](https://cloud.githubusercontent.com/assets/197597/18621255/4fb77214-7dd5-11e6-8eeb-9e876b921b5e.gif)
-
 
 In this case, we found that the AST looks like this.
 
