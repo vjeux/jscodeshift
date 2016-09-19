@@ -96,7 +96,7 @@ function isInsideOfFunctionDeclaration(path) {
 }
 ```
 
-### Getting a `collection` from a `node` or `path`
+## Getting a `collection` from a `node` or `path`
 
 If you have a reference to a `node`, you can get a `collection` by wrapping it into `j`, but you lose the ability to traverse up the tree because `parentPath` no longer exists. This is very useful if you want to re-trigger a search from that point.
 
