@@ -51,7 +51,7 @@ function isDescribeNode(node) {
 
 // ...
 
-  .filter(path => isDescribeNode(node.path))
+  .filter(path => isDescribeNode(path.node))
 ```
 
 ## Always check the `type` of a node
