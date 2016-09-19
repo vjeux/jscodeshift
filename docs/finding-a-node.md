@@ -17,8 +17,6 @@ In this case, we found that the AST looks like this.
 }
 ```
 
-## Second argument of `find`
-
 We can use the `find` API to do a simple pattern-matching agains the AST.
 
 ```js
@@ -70,15 +68,18 @@ The object you get from a `j` call are not real arrays, so unfortunately `.lengt
   .size()
 ```
 
-## `node` vs `path`
+## `node` vs `path` vs `collection`
 
-There are two concepts that is worth understanding:
+There are three concepts that is worth understanding:
 
 - A `node` is a plain JS object which represents the AST node that you are familiar with
 - A `path` is an object that
-  - you can call methods like `find` and `forEach` and has two useful attributes:
   - `parentPath` which allows you to traverse the AST upward
   - `node` which gives you the raw AST node
+- A `collection` is obtained via calling `j(path or node)` and has helpful methods attached such as
+  - traversal: `find`, `filter`, `forEach`
+  - mutation: `replaceWith`, `remove`
+
 
 ## Traversing up
 
@@ -96,9 +97,9 @@ function isInsideOfFunctionDeclaration(path) {
 }
 ```
 
-### Getting a `node` from a `path`
+### Getting a `collection` from a `node` or `path`
 
-If you have a reference to a `node`, you can get a `path` back by wrapping it into `j`, but you lose the ability to traverse up the tree because `parentPath` no longer exists. This is very useful if you want to re-trigger a search from that point.
+If you have a reference to a `node`, you can get a `collection` by wrapping it into `j`, but you lose the ability to traverse up the tree because `parentPath` no longer exists. This is very useful if you want to re-trigger a search from that point.
 
 ```js
   .find(j.CallExpression)
