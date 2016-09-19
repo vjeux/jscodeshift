@@ -1,0 +1,55 @@
+# Optimizing runtime
+
+Most of the codemods do not update every single js file in the codebase, it is likely going to only update a subset of them. As an optimization guideline, the best way to optimize something is not to do the work :)
+
+## Do not pretty-print if nothing changed
+
+Because `jscodeshift` mutation API relies on direct mutation of the AST, it cannot know that you changed something and therefore will try to print the entire file all the time. A handy trick to reduce the time it takes to run the codemod in cases where there are a lot of false positives is to only return `toSource()` from `transformer` function when something has changed.
+
+```js
+export default function transformer(file, api) {
+  const j = api.jscodeshift;
+  let hasChanged = false;
+
+  const root = j(file.source)
+    .find(/* ... */)
+    .forEach(path => {
+      hasChanged = true;
+      // ...
+    });
+    
+  if (hasChanged) {
+    return root.toSource();
+  }
+};
+```
+
+When the transformer doesn't return a string, the file will be marked as `Skipped`.
+
+## Pre-select files that could potentially match
+
+The default way to run `jscodeshift` is to give it an entire folder and it is going to try every single file one by one.
+
+```zsh
+jscodeshift . -t ../transform.js
+```
+
+Most of the time, you can find some pattern to search for in the file where if it exists, you know you need to run the codemod on the file. This lets you trim down the huge number of files to a small set.
+
+A good tool for this is `grep`. For example, if we want to remove all the `describe` calls, we can `grep` for the string `describe(`. This doesn't need to be precise, if there are a few occurences of `describe(` in a comment, we're just going to do some extra work.
+
+```zsh
+grep -R 'describe(' .
+```
+
+Once you are happy with the results, then you can append `-l` to `grep` which will only print the filenames and use `xargs` to pass it to `jscodeshift`.
+
+```zsh
+grep -R 'describe(' . -l | xargs jscodeshift -t ../transform.js
+```
+
+Another handy unix utility is `find` which lets you find all the files with a specific name. If we want to search for all the files that end with `-test.js` it would look like this.
+
+```zsh
+find . -name '*-test.js'
+```
