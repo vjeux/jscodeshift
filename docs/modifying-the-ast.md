@@ -1,6 +1,8 @@
 # Modifying the AST
 
-Now that you found the node you were looking for, it is time to modify the AST!
+Now that you found the node you were looking for, it is time to modify the AST! The first step is to figure out what the AST looks like before and after the transformations. For this, the easiest way is to write both versions in [ASTExplorer.net](http://astexplorer.net/) and inspect the AST in the right pane.
+
+![](https://cloud.githubusercontent.com/assets/197597/18655379/3972e6fa-7e9d-11e6-96a6-bc082a57298b.gif)
 
 ## Mutate nodes directly
 
