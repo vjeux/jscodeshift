@@ -6,7 +6,7 @@
 
 You want to use [ASTExplorer.net](http://astexplorer.net/) and enable `jscodeshift` in the Transform menu to implement your codemods.
 
-<a href="http://astexplorer.net/"><img width="808" src="https://cloud.githubusercontent.com/assets/197597/18656125/6bf22e64-7ea3-11e6-9b96-d770c14b0d9d.png"></a>
+<a href="http://astexplorer.net/"><img width="302" src="https://cloud.githubusercontent.com/assets/197597/18656125/6bf22e64-7ea3-11e6-9b96-d770c14b0d9d.png"></a>
 
 And the command line tool to run it over your codebase.
 
