@@ -4,19 +4,21 @@
 
 ### Usage
 
-You want to use [ASTExplorer.net](http://astexplorer.net/) and enable `jscodeshift` in the Transform menu to implement your codemods.
+Implement your codemods using [ASTExplorer.net](http://astexplorer.net/): Transform > `jscodeshift`
 
-<a href="http://astexplorer.net/"><img width="302" src="https://cloud.githubusercontent.com/assets/197597/18656125/6bf22e64-7ea3-11e6-9b96-d770c14b0d9d.png"></a>
+<a href="http://astexplorer.net/"><img width="502" src="https://cloud.githubusercontent.com/assets/197597/18656125/6bf22e64-7ea3-11e6-9b96-d770c14b0d9d.png"></a>
 
-And the command line tool to run it over your codebase.
+And run them over your codebase using the command line tool
 
 ```zsh
 npm install -g jscodeshift
 ```
 
-<a href="docs/writing-a-codemod.md"><img width="302" src="https://cloud.githubusercontent.com/assets/197597/18656034/7db256f2-7ea2-11e6-9dd3-42a20e6eedfd.png"></a>
+<a href="docs/writing-a-codemod.md"><img width="250" src="https://cloud.githubusercontent.com/assets/197597/18656034/7db256f2-7ea2-11e6-9dd3-42a20e6eedfd.png"></a>
 
 ### Guides
+
+
 
 - [Writing a codemod](docs/writing-a-codemod.md)
 - [Finding a node](docs/finding-a-node.md)
