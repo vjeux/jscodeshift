@@ -42,6 +42,36 @@ arrow.async = true;
 
 If you are curious, check out the [list of all the specified builders](https://github.com/benjamn/ast-types/tree/master/def).
 
+## Template helpers
+
+The code using builder can become hard to understand if you don't know the AST representation very well. `jscodeshift` has a nifty feature which lets you use the es6 template strings in order to build the AST.
+
+For example, if you write to create the AST representation of `foo[foo.length - 1]`, using builders it would look like
+
+```js
+var name = 'foo';
+var node = j.memberExpression(
+  j.identifier(name),
+  j.binaryExpression(
+    '-',
+    j.memberExpression(
+      j.identifier(name),
+      j.identifier('length')
+    ),
+    j.literal(1)
+  )
+);
+```
+
+or you can use `j.template.expression`
+
+```js
+var name = 'foo';
+var node = j.template.expression`${name}[${name} - 1]`
+```
+
+There are also `j.template.statement` and `j.template.statements` if you need them.
+
 ## Replacing a node
 
 If you have access to the parent node and know in which attribute the node you want to update is, you can mutate it directly.
