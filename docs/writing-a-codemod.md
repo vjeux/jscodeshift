@@ -15,3 +15,6 @@ export default function transformer(file, api) {
     .toSource();
 };
 ```
+
+
+[write] Use flow parser
